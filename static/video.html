@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Video Lecture - ML Academy</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="/static/styles.css">
+    <link rel="stylesheet" href="/static/video-page.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-content">
+            <div class="nav-brand">
+                <a href="/" class="nav-link">
+                    <i class="fas fa-graduation-cap"></i>
+                    <span>ML Academy</span>
+                </a>
+            </div>
+            <div class="nav-actions">
+                <button onclick="window.history.back()" class="back-button">
+                    <i class="fas fa-arrow-left"></i> Back to Course
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <main class="video-page-content">
+        <div class="video-container">
+            <video id="mainVideo" controls class="main-video">
+                <source src="" type="video/mp4">
+                Your browser does not support the video tag.
+            </video>
+        </div>
+        
+        <div class="video-details">
+            <h1 id="videoTitle" class="video-title"></h1>
+            
+            <div class="video-meta">
+                <div id="videoModule" class="module-tag"></div>
+                <div id="videoSection" class="section-tag"></div>
+            </div>
+
+            <div class="video-info-section">
+                <h2>Keywords</h2>
+                <div id="videoKeywords" class="keyword-tags"></div>
+            </div>
+
+            <div class="video-info-section">
+                <h2>Transcription</h2>
+                <p id="videoTranscription" class="video-transcription"></p>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // Get video ID from URL
+        const videoId = window.location.pathname.split('/').pop();
+
+        // Fetch video data
+        async function loadVideoData() {
+            try {
+                const response = await fetch(`/search?q=${videoId}`);
+                const data = await response.json();
+                
+                if (data.hits && data.hits.length > 0) {
+                    const video = data.hits[0];
+                    
+                    // Set video source
+                    const mainVideo = document.getElementById('mainVideo');
+                    mainVideo.src = video.video_url;
+                    
+                    // Set video title
+                    document.getElementById('videoTitle').textContent = formatVideoTitle(video.video_title);
+                    document.title = `${formatVideoTitle(video.video_title)} - ML Academy`;
+                    
+                    // Set module and section tags
+                    const moduleTag = getModuleFromVideoId(video.video_id);
+                    const sectionTag = getSectionFromVideoId(video.video_id);
+                    
+                    if (moduleTag) {
+                        document.getElementById('videoModule').textContent = moduleTag;
+                    }
+                    if (sectionTag) {
+                        document.getElementById('videoSection').textContent = sectionTag;
+                    }
+                    
+                    // Set keywords
+                    if (video.keywords && video.keywords.length > 0) {
+                        document.getElementById('videoKeywords').innerHTML = video.keywords
+                            .map(keyword => `<span class="keyword-tag">${keyword}</span>`)
+                            .join('');
+                    }
+                    
+                    // Set transcription
+                    if (video.transcription) {
+                        document.getElementById('videoTranscription').textContent = video.transcription;
+                    }
+                }
+            } catch (error) {
+                console.error('Error loading video:', error);
+            }
+        }
+
+        // Helper functions
+        function formatVideoTitle(videoId) {
+            return videoId
+                .replace(/_/g, ' ')
+                .replace(/(?:Mod|Module)\d+/i, '')
+                .replace(/Sect/i, 'Section')
+                .replace(/part/i, 'Part')
+                .trim();
+        }
+
+        function getModuleFromVideoId(videoId) {
+            const match = videoId.match(/(?:Mod|Module)(\d+)/i);
+            return match ? `Module ${match[1]}` : '';
+        }
+
+        function getSectionFromVideoId(videoId) {
+            const match = videoId.match(/Sect(\d+)/i);
+            return match ? `Section ${match[1]}` : '';
+        }
+
+        // Load video data when page loads
+        document.addEventListener('DOMContentLoaded', loadVideoData);
+    </script>
+</body>
+</html> 

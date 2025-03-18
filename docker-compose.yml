@@ -1,0 +1,22 @@
+version: '3.8'
+
+services:
+  web:
+    build: .
+    ports:
+      - "5000:5000"
+      - "7700:7700"
+    environment:
+      - FLASK_APP=app.py
+      - FLASK_ENV=development
+      - MEILI_MASTER_KEY=2aWd2TYzWnY-4QftPtC3Y5ZPA0_5g7OsIpK369Srcds
+      - MEILISEARCH_URL=http://localhost:7700
+    volumes:
+      - ./static:/app/static
+      - ./json_output:/app/json_output
+      - meili_data:/data.ms
+    restart: unless-stopped
+
+volumes:
+  meili_data:
+    driver: local

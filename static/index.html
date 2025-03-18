@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ML Academy - Video Learning Platform</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="/static/styles.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-content">
+            <div class="nav-brand">
+                <i class="fas fa-graduation-cap"></i>
+                <span>ML Academy</span>
+            </div>
+            <div class="search-container">
+                <div class="search-box">
+                    <input type="text" id="searchInput" placeholder="Search videos...">
+                    <button id="searchButton">
+                        <i class="fas fa-search"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <main class="main-content">
+        <div class="sidebar">
+            <h2>Course Modules</h2>
+            <div id="moduleList" class="module-list">
+                <!-- Modules will be populated here -->
+            </div>
+        </div>
+
+        <div class="content">
+            <div id="searchResults" class="search-results hidden">
+                <h2>Search Results</h2>
+                <div id="results" class="results-grid">
+                    <!-- Search results will be displayed here -->
+                </div>
+            </div>
+
+            <div id="moduleContent" class="module-content">
+                <h2>Course Content</h2>
+                <div id="videoGrid" class="video-grid">
+                    <!-- Module videos will be displayed here -->
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="footer-content">
+            <p>&copy; 2024 ML Academy. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="/static/app.js"></script>
+</body>
+</html> 

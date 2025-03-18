@@ -1,0 +1,5 @@
+Flask==2.3.2
+meilisearch==0.23.0
+python-dotenv==1.0.0
+flask-cors==4.0.0
+opencv-python

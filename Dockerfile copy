@@ -1,0 +1,38 @@
+# Use an official Python runtime as the base image
+FROM python:3.9-slim
+
+# Set environment variables
+ENV PYTHONUNBUFFERED=1
+
+# Install system dependencies
+RUN apt-get update && apt-get install -y \
+    curl \
+    && rm -rf /var/lib/apt/lists/*
+
+# Install MeiliSearch
+RUN curl -L https://install.meilisearch.com | sh && \
+    mv /meilisearch /usr/local/bin/meilisearch
+
+# Set the working directory in the container
+WORKDIR /app
+
+# Copy the requirements file into the container
+COPY requirements.txt .
+
+# Install Python dependencies
+RUN pip install --no-cache-dir -r requirements.txt
+
+# Copy all project files into the container
+COPY . .
+
+# Expose the Flask app port
+EXPOSE 5000
+
+# Expose the MeiliSearch port
+EXPOSE 7700
+
+# Create a shell script to start MeiliSearch and Flask
+RUN echo '#!/bin/sh\n/usr/local/bin/meilisearch &\nflask run --host=0.0.0.0' > start.sh && chmod +x start.sh
+
+# Use JSON array form for CMD
+CMD ["./start.sh"]
