@@ -47,3 +47,4 @@ json_output/*
 # MeiliSearch
 update-title.py
 create_screenshot.py
+meilisearch
